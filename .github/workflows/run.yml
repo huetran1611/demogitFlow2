@@ -1,0 +1,28 @@
+name: Run algorithm
+
+on: push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Run
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        x: [1, 2, 3]
+        y: [6, 7, 8]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run file
+        run: python test.py ${{ matrix.x }} ${{ matrix.y }}
